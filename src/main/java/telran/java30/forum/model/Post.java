@@ -29,7 +29,7 @@ public class Post {
 	@Setter
 	String content;
 	String author;
-	@JsonFormat(pattern = "dd-MM-yyyy'T'hh:mm:ss")
+	@JsonFormat(pattern = "dd-MM-yyyy' T 'hh:mm:ss")
 	LocalDateTime dateCreated;
 	@Setter
 	@Singular

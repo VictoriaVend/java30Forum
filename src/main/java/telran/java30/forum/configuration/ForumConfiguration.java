@@ -1,16 +1,18 @@
 package telran.java30.forum.configuration;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import telran.java30.forum.service.ForumService;
-import telran.java30.forum.service.ForumServiceImpl;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
 
 
-
-	@Configuration
-	public class ForumConfiguration {
-	public ForumService getForumService() {
-		return new ForumServiceImpl();
+@Configuration
+public class ForumConfiguration {
+	@Bean
+	public Docket getApi() {
+		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any()).paths(PathSelectors.any()).build();
 	}
-	}
-
+}
