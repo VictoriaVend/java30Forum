@@ -2,9 +2,8 @@ package telran.java30.forum.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -37,14 +36,14 @@ public class Post {
 	List<String> tags;
 	Integer likes;
 	@Singular
-	Set<Comment> comments;
+	List<Comment> comments;
 
 	public Post(String title, String content, String author) {
 		this.title = title;
 		this.content = content;
 		this.author = author;
 		this.tags = new ArrayList<String>();
-		this.comments = new HashSet<Comment>();
+		this.comments = new LinkedList<Comment>();
 		this.dateCreated = LocalDateTime.now();
 		this.likes = 0;
 	}

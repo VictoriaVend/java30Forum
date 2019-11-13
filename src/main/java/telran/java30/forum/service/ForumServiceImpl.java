@@ -1,9 +1,8 @@
 package telran.java30.forum.service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +24,11 @@ public class ForumServiceImpl implements ForumService {
 
 	@Override
 	public boolean addLike(String id) {
-		if (forumRepository.existsById(id)) {
-			return false;
-		}
+		
 		Post post=forumRepository.findById(id).get();
 		post.addLike();
 		forumRepository.save(post);
-		return true;
+		return forumRepository.existsById(id);
 
 	}
 
@@ -40,8 +37,8 @@ public class ForumServiceImpl implements ForumService {
 		Post post=forumRepository.findById(id).orElseThrow(()->new PostNotFoundExeption(id));
 		Comment comment=new Comment(author,message.getMessage());
 		post.addComment(comment);
-		post=forumRepository.save(post);
-		return postToPostRepstDto(post);
+		Post post1=forumRepository.save(post);
+		return postToPostRepstDto(post1);
 	}
 
 	@Override
@@ -82,13 +79,13 @@ public class ForumServiceImpl implements ForumService {
 	}
 
 	private PostRepostDto postToPostRepstDto(Post post) {
-		Set<CommentRepostDto> commentset = new HashSet<>();
-		post.getComments().forEach(com -> commentset.add(comentToCommentRepostDto(com)));
+		List<CommentRepostDto> commentlist = new LinkedList<>();
+		post.getComments().forEach(com -> commentlist.add(comentToCommentRepostDto(com)));
 		List<String> taglist = new ArrayList<>();
 		post.getTags().forEach(s -> taglist.add(s));
 
 		return PostRepostDto.builder().id(post.getId()).title(post.getTitle()).content(post.getContent())
-				.author(post.getAuthor()).dateCreated(post.getDateCreated()).tags(taglist).likes(post.getLikes())
+				.author(post.getAuthor()).dateCreated(post.getDateCreated()).tags(taglist).likes(post.getLikes()).comments(commentlist)
 				.build();
 	}
 

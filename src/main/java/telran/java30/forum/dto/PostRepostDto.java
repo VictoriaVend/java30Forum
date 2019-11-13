@@ -2,7 +2,7 @@ package telran.java30.forum.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
+
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -28,6 +28,6 @@ public class PostRepostDto {
 	List<String> tags;
 	Integer likes;
 	@Singular
-	Set<CommentRepostDto> comments;
+	List<CommentRepostDto> comments;
 
 }
