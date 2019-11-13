@@ -43,8 +43,8 @@ public class ForumServiceImpl implements ForumService {
 
 	@Override
 	public List<PostRepostDto> findPostByAuthor(String author) {
-		forumRepository.findByAuthor(author).map(p->postToPostRepstDto(p)).collect(Collectors.toList());
-		return null;
+		return forumRepository.findByAuthor(author).map(p->postToPostRepstDto(p)).collect(Collectors.toList());
+		
 	}
 
 	@Override
