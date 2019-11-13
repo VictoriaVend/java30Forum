@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import telran.java30.forum.dto.MessageDto;
@@ -17,37 +18,38 @@ import telran.java30.forum.dto.PostRepostDto;
 import telran.java30.forum.service.ForumService;
 
 @RestController
+@RequestMapping(ForumURL.FORUM)
 public class ForumController {
 	@Autowired
 	ForumService forumService;
 
-	@PostMapping(ForumURL.FORUM + ForumURL.POST + "/{author}")
+	@PostMapping(ForumURL.POST + "/{author}")
 	public PostRepostDto addPost(@PathVariable String author, @RequestBody PostDto postDto) {
 		return forumService.addPost(postDto, author);
 	}
 
-	@PutMapping(ForumURL.FORUM + ForumURL.POST + "/{id}" + ForumURL.LIKE)
+	@PutMapping(ForumURL.POST + "/{id}" + ForumURL.LIKE)
 	public boolean addLike(@PathVariable String id) {
 		return forumService.addLike(id);
 	}
 
-	@PutMapping(ForumURL.FORUM + ForumURL.POST + "/{id}" + ForumURL.COMMENT + "/{author}")
+	@PutMapping(ForumURL.POST + "/{id}" + ForumURL.COMMENT + "/{author}")
 	public PostRepostDto addComment(@RequestBody MessageDto message, @PathVariable String id,
 			@PathVariable String author) {
 		return forumService.addComment(message, id, author);
 	}
 
-	@GetMapping(ForumURL.FORUM + ForumURL.POSTS + ForumURL.AUTHOR + "/{author}")
+	@GetMapping(ForumURL.POSTS + ForumURL.AUTHOR + "/{author}")
 	public List<PostRepostDto> findPostByAuthor(@PathVariable String author) {
 		return forumService.findPostByAuthor(author);
 	}
 
-	@GetMapping(ForumURL.FORUM + ForumURL.POST + "/{id}")
+	@GetMapping(ForumURL.POST + "/{id}")
 	public PostRepostDto findPostById(@PathVariable String id) {
 		return forumService.findPostById(id);
 	}
 
-	@DeleteMapping(ForumURL.FORUM + ForumURL.POST + "/{id}")
+	@DeleteMapping(ForumURL.POST + "/{id}")
 	public PostRepostDto deletePost(@PathVariable String id) {
 		return forumService.deletePost(id);
 	}
