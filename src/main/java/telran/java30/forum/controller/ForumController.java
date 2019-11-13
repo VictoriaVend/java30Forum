@@ -24,6 +24,9 @@ import telran.java30.forum.service.ForumService;
 public class ForumController {
 	@Autowired
 	ForumService forumService;
+	
+	//findAllCommentPost(String id)
+	//findAllPostCommentByAutor(String id, String author)
 
 	@PostMapping(ForumURL.POSTS + ForumURL.TAGS )
 	public List<PostRepostDto> findPostsByTags(@RequestBody List<String> tags) {
@@ -31,8 +34,8 @@ public class ForumController {
 
 	}
 	@PostMapping(ForumURL.POSTS+ForumURL.DATES)
-	public List<PostRepostDto>  findPostsByDates(@RequestBody DatesDto dateDto){
-		return forumService.findPostsByDates(dateDto);
+	public List<PostRepostDto>  findPostsByDates(@RequestBody DatesDto datesDto){
+		return forumService.findPostsByDates(datesDto);
 		
 	}
 
