@@ -7,5 +7,7 @@ public interface ForumURL {
 	public static String POSTS = "/posts";
 	public static String LIKE = "/like";
 	public static String COMMENT = "/comment";
+	public static String TAGS = "/tags";
+	public static String DATES = "/dates";
 
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import telran.java30.forum.dao.ForumRepository;
 import telran.java30.forum.dto.CommentRepostDto;
+import telran.java30.forum.dto.DatesDto;
 import telran.java30.forum.dto.MessageDto;
 import telran.java30.forum.dto.PostDto;
 import telran.java30.forum.dto.PostNotFoundExeption;
@@ -24,8 +25,8 @@ public class ForumServiceImpl implements ForumService {
 
 	@Override
 	public boolean addLike(String id) {
-		
-		Post post=forumRepository.findById(id).get();
+
+		Post post = forumRepository.findById(id).get();
 		post.addLike();
 		forumRepository.save(post);
 		return forumRepository.existsById(id);
@@ -34,17 +35,17 @@ public class ForumServiceImpl implements ForumService {
 
 	@Override
 	public PostRepostDto addComment(MessageDto message, String id, String author) {
-		Post post=forumRepository.findById(id).orElseThrow(()->new PostNotFoundExeption(id));
-		Comment comment=new Comment(author,message.getMessage());
+		Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundExeption(id));
+		Comment comment = new Comment(author, message.getMessage());
 		post.addComment(comment);
-		Post post1=forumRepository.save(post);
+		Post post1 = forumRepository.save(post);
 		return postToPostRepstDto(post1);
 	}
 
 	@Override
 	public List<PostRepostDto> findPostByAuthor(String author) {
-		return forumRepository.findByAuthor(author).map(p->postToPostRepstDto(p)).collect(Collectors.toList());
-		
+		return forumRepository.findByAuthor(author).map(p -> postToPostRepstDto(p)).collect(Collectors.toList());
+
 	}
 
 	@Override
@@ -57,13 +58,13 @@ public class ForumServiceImpl implements ForumService {
 
 	@Override
 	public PostRepostDto findPostById(String id) {
-		Post post=forumRepository.findById(id).orElseThrow(()->new PostNotFoundExeption(id));
+		Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundExeption(id));
 		return postToPostRepstDto(post);
 	}
 
 	@Override
 	public PostRepostDto updatePost(PostDto postDto, String id) {
-		Post post=forumRepository.findById(id).orElseThrow(()->new PostNotFoundExeption(id));
+		Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundExeption(id));
 		post.setTitle(postDto.getTitle());
 		post.setContent(postDto.getContent());
 		post.setTags(postDto.getTags());
@@ -73,7 +74,7 @@ public class ForumServiceImpl implements ForumService {
 
 	@Override
 	public PostRepostDto deletePost(String id) {
-		Post post=forumRepository.findById(id).orElseThrow(()->new PostNotFoundExeption(id));
+		Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundExeption(id));
 		forumRepository.deleteById(id);
 		return postToPostRepstDto(post);
 	}
@@ -85,14 +86,26 @@ public class ForumServiceImpl implements ForumService {
 		post.getTags().forEach(s -> taglist.add(s));
 
 		return PostRepostDto.builder().id(post.getId()).title(post.getTitle()).content(post.getContent())
-				.author(post.getAuthor()).dateCreated(post.getDateCreated()).tags(taglist).likes(post.getLikes()).comments(commentlist)
-				.build();
+				.author(post.getAuthor()).dateCreated(post.getDateCreated()).tags(taglist).likes(post.getLikes())
+				.comments(commentlist).build();
 	}
 
 	private CommentRepostDto comentToCommentRepostDto(Comment comment) {
 		return CommentRepostDto.builder().user(comment.getUser()).message(comment.getMessage())
 				.dateCreated(comment.getDateCreated()).likes(comment.getLikes()).build();
 
+	}
+
+	@Override
+	public List<PostRepostDto> findPostsByTags(List<String> tags) {
+		return forumRepository.findPostsByTagsIn(tags).map(p -> postToPostRepstDto(p)).collect(Collectors.toList());
+
+	}
+
+	@Override
+	public List<PostRepostDto> findPostsByDates(DatesDto dateDto) {
+		return forumRepository.findPostsByDateCreatedBetween(dateDto.getFrom(), dateDto.getTo())
+				.map(p -> postToPostRepstDto(p)).collect(Collectors.toList());
 	}
 
 }

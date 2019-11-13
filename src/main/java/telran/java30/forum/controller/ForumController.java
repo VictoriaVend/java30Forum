@@ -12,16 +12,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import telran.java30.forum.dto.DatesDto;
 import telran.java30.forum.dto.MessageDto;
 import telran.java30.forum.dto.PostDto;
 import telran.java30.forum.dto.PostRepostDto;
 import telran.java30.forum.service.ForumService;
 
-@RestController
+
 @RequestMapping(ForumURL.FORUM)
+@RestController
 public class ForumController {
 	@Autowired
 	ForumService forumService;
+
+	@PostMapping(ForumURL.POSTS + ForumURL.TAGS )
+	public List<PostRepostDto> findPostsByTags(@RequestBody List<String> tags) {
+		return forumService.findPostsByTags(tags);
+
+	}
+	@PostMapping(ForumURL.POSTS+ForumURL.DATES)
+	public List<PostRepostDto>  findPostsByDates(@RequestBody DatesDto dateDto){
+		return forumService.findPostsByDates(dateDto);
+		
+	}
 
 	@PostMapping(ForumURL.POST + "/{author}")
 	public PostRepostDto addPost(@PathVariable String author, @RequestBody PostDto postDto) {
