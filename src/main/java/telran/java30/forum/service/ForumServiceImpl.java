@@ -13,8 +13,8 @@ import telran.java30.forum.dto.CommentRepostDto;
 import telran.java30.forum.dto.DatesDto;
 import telran.java30.forum.dto.MessageDto;
 import telran.java30.forum.dto.PostDto;
-import telran.java30.forum.dto.PostNotFoundExeption;
 import telran.java30.forum.dto.PostRepostDto;
+import telran.java30.forum.exeption.PostNotFoundExeption;
 import telran.java30.forum.model.Comment;
 import telran.java30.forum.model.Post;
 
@@ -110,19 +110,22 @@ public class ForumServiceImpl implements ForumService {
 
 	@Override
 	public List<CommentRepostDto> findAllCommentsPost(String id) {
-		List<CommentRepostDto> comments= new LinkedList<>();
-		forumRepository.findById(id).orElseThrow(()->new PostNotFoundExeption(id))
-		.getComments().forEach(com->comments.add(comentToCommentRepostDto(com)));
+		List<CommentRepostDto> comments = new LinkedList<>();
+		forumRepository.findById(id).orElseThrow(() -> new PostNotFoundExeption(id)).getComments()
+				.forEach(com -> comments.add(comentToCommentRepostDto(com)));
 		return comments;
 	}
 
 	@Override
 	public List<CommentRepostDto> findAllCommentsByAutor(String id, String author) {
-		List<CommentRepostDto> comments= new LinkedList<>();
-		forumRepository.findById(id).orElseThrow(()->new PostNotFoundExeption(id))
-		.getComments().forEach(com->comments.add(comentToCommentRepostDto(com)));
-		//TODO
-		return null;
+		List<CommentRepostDto> comments = new LinkedList<>();
+		forumRepository.findById(id).orElseThrow(() -> new PostNotFoundExeption(id)).getComments().forEach(c -> {
+			if (c.getUser().equals(author)) {
+				comments.add(comentToCommentRepostDto(c));
+			}
+		});
+
+		return comments;
 	}
 
 }

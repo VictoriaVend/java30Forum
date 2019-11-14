@@ -1,4 +1,4 @@
-package telran.java30.forum.dto;
+package telran.java30.forum.exeption;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -8,7 +8,7 @@ public class PostNotFoundExeption extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;
 	public PostNotFoundExeption(String id) {
-		super("Student with id "+id+" not found!");
+		super("Post with id "+id+" not found!");
 	}
 
 }
