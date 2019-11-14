@@ -14,27 +14,27 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Singular;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@EqualsAndHashCode(of = { "login" })
-@Document(collection = "forum_user")
-
+@EqualsAndHashCode(of = {"login"})
+@Document(collection = "forum_users")
 public class UserAccount {
 	@Id
 	String login;
-	String passwerd;
+	String password;
 	LocalDateTime expDate;
 	@Singular
 	Set<String> roles;
 	String firstName;
 	String lastName;
-
+	
 	public boolean addRole(String role) {
 		return roles.add(role);
 	}
+
 	public boolean removeRole(String role) {
 		return roles.remove(role);
 	}

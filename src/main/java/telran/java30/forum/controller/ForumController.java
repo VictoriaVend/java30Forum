@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import telran.java30.forum.dto.CommentRepostDto;
 import telran.java30.forum.dto.DatesDto;
 import telran.java30.forum.dto.MessageDto;
 import telran.java30.forum.dto.PostDto;
@@ -24,9 +25,15 @@ import telran.java30.forum.service.ForumService;
 public class ForumController {
 	@Autowired
 	ForumService forumService;
-	
-	//findAllCommentPost(String id)
-	//findAllPostCommentByAutor(String id, String author)
+	@GetMapping(ForumURL.COMMENT+"/{id}")
+	public List<CommentRepostDto> findAllCommentsPost(@PathVariable String id){
+		return forumService.findAllCommentsPost(id);
+	}
+	@GetMapping(ForumURL.COMMENT+ForumURL.AUTHOR+"/{author}"+"/{id}")
+	public List<CommentRepostDto>findAllPostCommentByAutor(@PathVariable String id, @PathVariable String author){
+		return forumService.findAllCommentsByAutor(id,author);
+		
+	}
 
 	@PostMapping(ForumURL.POSTS + ForumURL.TAGS )
 	public List<PostRepostDto> findPostsByTags(@RequestBody List<String> tags) {

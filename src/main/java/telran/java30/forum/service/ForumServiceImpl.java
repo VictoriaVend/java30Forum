@@ -108,4 +108,21 @@ public class ForumServiceImpl implements ForumService {
 				.map(p -> postToPostRepstDto(p)).collect(Collectors.toList());
 	}
 
+	@Override
+	public List<CommentRepostDto> findAllCommentsPost(String id) {
+		List<CommentRepostDto> comments= new LinkedList<>();
+		forumRepository.findById(id).orElseThrow(()->new PostNotFoundExeption(id))
+		.getComments().forEach(com->comments.add(comentToCommentRepostDto(com)));
+		return comments;
+	}
+
+	@Override
+	public List<CommentRepostDto> findAllCommentsByAutor(String id, String author) {
+		List<CommentRepostDto> comments= new LinkedList<>();
+		forumRepository.findById(id).orElseThrow(()->new PostNotFoundExeption(id))
+		.getComments().forEach(com->comments.add(comentToCommentRepostDto(com)));
+		//TODO
+		return null;
+	}
+
 }
