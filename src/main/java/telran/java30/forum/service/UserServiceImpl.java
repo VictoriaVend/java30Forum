@@ -29,9 +29,9 @@ public class UserServiceImpl implements UserService {
 		Set<String>setRose =new HashSet<String>();
 		setRose.add("User");
 		UserAccount user = UserAccount.builder().login(userRegisterDto.getLogin())
-				.password(userRegisterDto.getPassword()).expDate(LocalDateTime.now().plusDays(90)).roles(setRose)
+				.password(userRegisterDto.getPassword()).expDate(LocalDateTime.now().plusDays(90)).roles(setRose/*new HashSet<String>() ne rabotaet*/)
 				.firstName(userRegisterDto.getFirstName()).lastName(userRegisterDto.getLastName()).build();
-		
+		/*user.addRole("User"); ne rabotaet*/
 		userAccountRepository.save(user);
 		return userAccountToUserProfile(user);
 	}
