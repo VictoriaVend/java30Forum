@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import telran.java30.forum.dao.UserAccountRepository;
@@ -24,10 +26,12 @@ public class UserServiceImpl implements UserService {
 		if (userAccountRepository.existsById(userRegisterDto.getLogin())) {
 			throw new UserNotAddedExeption(userRegisterDto.getLogin());
 		}
+		Set<String>setRose =new HashSet<String>();
+		setRose.add("User");
 		UserAccount user = UserAccount.builder().login(userRegisterDto.getLogin())
-				.password(userRegisterDto.getPassword()).expDate(LocalDateTime.now()).roles(new HashSet<>())
+				.password(userRegisterDto.getPassword()).expDate(LocalDateTime.now().plusDays(90)).roles(setRose)
 				.firstName(userRegisterDto.getFirstName()).lastName(userRegisterDto.getLastName()).build();
-		user.addRole("user");
+		
 		userAccountRepository.save(user);
 		return userAccountToUserProfile(user);
 	}

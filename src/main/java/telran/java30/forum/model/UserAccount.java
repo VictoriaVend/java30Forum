@@ -32,7 +32,7 @@ public class UserAccount {
 	String lastName;
 	
 	public boolean addRole(String role) {
-		return roles.add(role);
+		return this.roles.add(role);
 	}
 
 	public boolean removeRole(String role) {
