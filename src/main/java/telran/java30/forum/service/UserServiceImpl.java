@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 			user.setLastName(userRegisterDto.getLastName());
 		if (userRegisterDto.getPassword() != null) {
 			user.setPassword(userRegisterDto.getPassword());
-			user.setExpDate(LocalDateTime.now());
+			user.setExpDate(LocalDateTime.now().plusDays(90));
 		}
 		userAccountRepository.save(user);
 		return userAccountToUserProfile(user);
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
 		if (userRegisterDto.getPassword() == null)
 			return false;
 		user.setPassword(userRegisterDto.getPassword());
-		user.setExpDate(LocalDateTime.now());
+		user.setExpDate(LocalDateTime.now().plusDays(90));
 		userAccountRepository.save(user);
 		return true;
 	}
