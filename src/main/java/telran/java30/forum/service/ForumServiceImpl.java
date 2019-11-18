@@ -14,7 +14,7 @@ import telran.java30.forum.dto.DatesDto;
 import telran.java30.forum.dto.MessageDto;
 import telran.java30.forum.dto.PostDto;
 import telran.java30.forum.dto.PostRepostDto;
-import telran.java30.forum.exeption.PostNotFoundExeption;
+import telran.java30.forum.exeption.PostNotFoundException;
 import telran.java30.forum.model.Comment;
 import telran.java30.forum.model.Post;
 
@@ -35,7 +35,7 @@ public class ForumServiceImpl implements ForumService {
 
 	@Override
 	public PostRepostDto addComment(MessageDto message, String id, String author) {
-		Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundExeption(id));
+		Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
 		Comment comment = new Comment(author, message.getMessage());
 		post.addComment(comment);
 		Post post1 = forumRepository.save(post);
@@ -58,13 +58,13 @@ public class ForumServiceImpl implements ForumService {
 
 	@Override
 	public PostRepostDto findPostById(String id) {
-		Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundExeption(id));
+		Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
 		return postToPostRepstDto(post);
 	}
 
 	@Override
 	public PostRepostDto updatePost(PostDto postDto, String id) {
-		Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundExeption(id));
+		Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
 		post.setTitle(postDto.getTitle());
 		post.setContent(postDto.getContent());
 		post.setTags(postDto.getTags());
@@ -74,7 +74,7 @@ public class ForumServiceImpl implements ForumService {
 
 	@Override
 	public PostRepostDto deletePost(String id) {
-		Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundExeption(id));
+		Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
 		forumRepository.deleteById(id);
 		return postToPostRepstDto(post);
 	}
@@ -111,7 +111,7 @@ public class ForumServiceImpl implements ForumService {
 	@Override
 	public List<CommentRepostDto> findAllCommentsPost(String id) {
 		List<CommentRepostDto> comments = new LinkedList<>();
-		forumRepository.findById(id).orElseThrow(() -> new PostNotFoundExeption(id)).getComments()
+		forumRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id)).getComments()
 				.forEach(com -> comments.add(comentToCommentRepostDto(com)));
 		return comments;
 	}
@@ -119,7 +119,7 @@ public class ForumServiceImpl implements ForumService {
 	@Override
 	public List<CommentRepostDto> findAllCommentsByAutor(String id, String author) {
 		List<CommentRepostDto> comments = new LinkedList<>();
-		forumRepository.findById(id).orElseThrow(() -> new PostNotFoundExeption(id)).getComments().forEach(c -> {
+		forumRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id)).getComments().forEach(c -> {
 			if (c.getUser().equals(author)) {
 				comments.add(comentToCommentRepostDto(c));
 			}

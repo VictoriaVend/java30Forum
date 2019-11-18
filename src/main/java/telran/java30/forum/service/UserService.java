@@ -1,22 +1,24 @@
 package telran.java30.forum.service;
 
-import java.util.List;
+import java.util.Set;
 
+import telran.java30.forum.dto.UserEditDto;
 import telran.java30.forum.dto.UserProfileDto;
 import telran.java30.forum.dto.UserRegisterDto;
 
 public interface UserService {
-	UserProfileDto addUser(UserRegisterDto userRegisterDto);
+	UserProfileDto register(UserRegisterDto userRegisterDto);
 
-	UserProfileDto updateUser(UserRegisterDto userRegisterDto);
+	UserProfileDto login(String token);
 
-	UserProfileDto findUser(String login);
+	UserProfileDto editUser(String token, UserEditDto userEditDto);
 
-	UserProfileDto deleteUser(String login);
+	UserProfileDto removeUser(String token);
 
-	List<String> addRole(String login, String role);
+	void changePassword(String token, String password);
 
-	List<String> removeRole(String login, String role);
-	
-	boolean editPassword(String login, UserRegisterDto userRegisterDto); 
+	Set<String> addRole(String login, String role, String token);
+
+	Set<String> removeRole(String login, String role, String token);
+
 }
