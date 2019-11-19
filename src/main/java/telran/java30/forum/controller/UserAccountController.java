@@ -44,7 +44,7 @@ public class UserAccountController {
 	}
 
 	@PutMapping("/user/edit/password")
-	public void changePassword(@RequestHeader("Authorization") String token, MessageDto password) {
+	public void changePassword(@RequestHeader("Authorization") String token, @RequestBody MessageDto password) {
 		userService.changePassword(token, password);
 	}
 

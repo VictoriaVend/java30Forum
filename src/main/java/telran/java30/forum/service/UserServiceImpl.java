@@ -73,7 +73,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void changePassword(String token, MessageDto password) {
 		UserAccount userAccount = authentication(token);
-		userAccount.setPassword(BCrypt.hashpw(password.getMessage(), BCrypt.gensalt()));
+		String pas=password.getMessage();
+		System.err.println(pas);
+		pas=BCrypt.hashpw(password.getMessage(), BCrypt.gensalt());
+		System.err.println(pas);
+		userAccount.setPassword(pas);
 		userAccount.setExpDate(LocalDateTime.now().plusDays(accountConfiguration.getExpPeriod()));
 		userAccountRepository.save(userAccount);
 
