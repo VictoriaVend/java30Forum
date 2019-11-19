@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
-import telran.java30.forum.controller.UserAccountController;
 import telran.java30.forum.exeption.UserAuthenticationException;
 import telran.java30.forum.service.UserAccountCredentials;
 
@@ -33,10 +32,10 @@ public class AccountConfiguration {
 			token = token.substring(pos + 1);
 			String str = new String(Base64.getDecoder().decode(token));
 			String[] credention = str.split(":");
-			
-			return new UserAccountCredentials(credention[0], credention[1]) ;
+
+			return new UserAccountCredentials(credention[0], credention[1]);
 		} catch (Exception e) {
-		throw new UserAuthenticationException();
+			throw new UserAuthenticationException();
 		}
 
 	}

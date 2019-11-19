@@ -2,6 +2,7 @@ package telran.java30.forum.service;
 
 import java.util.Set;
 
+import telran.java30.forum.dto.MessageDto;
 import telran.java30.forum.dto.UserEditDto;
 import telran.java30.forum.dto.UserProfileDto;
 import telran.java30.forum.dto.UserRegisterDto;
@@ -15,7 +16,7 @@ public interface UserService {
 
 	UserProfileDto removeUser(String token);
 
-	void changePassword(String token, String password);
+	void changePassword(String token, MessageDto password);
 
 	Set<String> addRole(String login, String role, String token);
 
