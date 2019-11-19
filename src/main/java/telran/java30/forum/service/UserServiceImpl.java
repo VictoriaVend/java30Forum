@@ -86,7 +86,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Set<String> addRole(String login, String role, String token) {
 		UserAccount userAccountAdmin = userAccountRepository.findById(accountConfiguration.getLoginAdmin()).orElseThrow(UserAuthenticationException::new);
-		if(userAccountAdmin.equals(authentication(token))) {throw new ForbiddenException();}
+		System.err.println(userAccountAdmin.getLogin());
+		if(!userAccountAdmin.equals(authentication(token))) {throw new ForbiddenException();}
 		UserAccount userAccount = userAccountRepository.findById(login)
 				.orElseThrow(UserAuthenticationException::new);
 		userAccount.addRole(role);
@@ -98,7 +99,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Set<String> removeRole(String login, String role, String token) {
 		UserAccount userAccountAdmin = userAccountRepository.findById(accountConfiguration.getLoginAdmin()).orElseThrow(UserAuthenticationException::new);
-		if(userAccountAdmin.equals(authentication(token))) {throw new ForbiddenException();}
+		System.err.println(userAccountAdmin.getLogin());
+		if(!userAccountAdmin.getLogin().equals(authentication(token).getLogin())) {throw new ForbiddenException();}
 		UserAccount userAccount = userAccountRepository.findById(login)
 				.orElseThrow(UserAuthenticationException::new);
 		
