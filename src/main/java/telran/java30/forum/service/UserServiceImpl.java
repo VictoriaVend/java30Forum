@@ -26,8 +26,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	AccountConfiguration accountConfiguration;
 
-	
-
 	@Override
 	public UserProfileDto register(UserRegisterDto userRegisterDto) {
 		if (userAccountRepository.existsById(userRegisterDto.getLogin())) {
@@ -73,10 +71,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void changePassword(String token, MessageDto password) {
 		UserAccount userAccount = authentication(token);
-		String pas=password.getMessage();
-		System.err.println(pas);
-		pas=BCrypt.hashpw(password.getMessage(), BCrypt.gensalt());
-		System.err.println(pas);
+		String pas = password.getMessage();
+
+		pas = BCrypt.hashpw(password.getMessage(), BCrypt.gensalt());
+
 		userAccount.setPassword(pas);
 		userAccount.setExpDate(LocalDateTime.now().plusDays(accountConfiguration.getExpPeriod()));
 		userAccountRepository.save(userAccount);
@@ -85,31 +83,36 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Set<String> addRole(String login, String role, String token) {
-		UserAccount userAccountAdmin = userAccountRepository.findById(accountConfiguration.getLoginAdmin()).orElseThrow(UserAuthenticationException::new);
-		System.err.println(userAccountAdmin.getLogin());
-		if(!userAccountAdmin.equals(authentication(token))) {throw new ForbiddenException();}
-		UserAccount userAccount = userAccountRepository.findById(login)
+		UserAccount userAccountAdmin = userAccountRepository.findById(accountConfiguration.getLoginAdmin())
 				.orElseThrow(UserAuthenticationException::new);
+	
+		if (!userAccountAdmin.equals(authentication(token))) {
+			throw new ForbiddenException();
+		}
+		UserAccount userAccount = userAccountRepository.findById(login).orElseThrow(UserAuthenticationException::new);
 		userAccount.addRole(role);
 		userAccountRepository.save(userAccount);
 		return userAccount.getRoles();
-			
+
 	}
-	
+
 	@Override
 	public Set<String> removeRole(String login, String role, String token) {
-		UserAccount userAccountAdmin = userAccountRepository.findById(accountConfiguration.getLoginAdmin()).orElseThrow(UserAuthenticationException::new);
-		System.err.println(userAccountAdmin.getLogin());
-		if(!userAccountAdmin.getLogin().equals(authentication(token).getLogin())) {throw new ForbiddenException();}
-		UserAccount userAccount = userAccountRepository.findById(login)
+		UserAccount userAccountAdmin = userAccountRepository.findById(accountConfiguration.getLoginAdmin())
 				.orElseThrow(UserAuthenticationException::new);
-		
-		if(userAccount.removeRole(role)) {userAccountRepository.save(userAccount);}
+		if (!userAccountAdmin.getLogin().equals(authentication(token).getLogin())) {
+			throw new ForbiddenException();
+		}
+		UserAccount userAccount = userAccountRepository.findById(login).orElseThrow(UserAuthenticationException::new);
+
+		if (userAccount.removeRole(role)) {
+			userAccountRepository.save(userAccount);
+		}
 		return userAccount.getRoles();
 	}
 
 	private UserAccount authentication(String token) {
-		
+
 		UserAccountCredentials userAccountCredentials = accountConfiguration.tokenDecode(token);
 		UserAccount userAccount = userAccountRepository.findById(userAccountCredentials.getLogin())
 				.orElseThrow(UserAuthenticationException::new);
