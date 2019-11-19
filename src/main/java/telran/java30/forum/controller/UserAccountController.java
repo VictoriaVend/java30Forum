@@ -21,42 +21,42 @@ import telran.java30.forum.service.UserService;
 @RequestMapping("/account")
 public class UserAccountController {
 	@Autowired
-	UserService userAccountService;
-
+	UserService userService;
+	
 	@PostMapping("/user")
 	public UserProfileDto register(@RequestBody UserRegisterDto userRegisterDto) {
-		return userAccountService.register(userRegisterDto);
+		return userService.register(userRegisterDto);
 	}
 
 	@PostMapping("/login")
 	public UserProfileDto login(@RequestHeader("Authorization") String token) {
-		return userAccountService.login(token);
+		return userService.login(token);
 	}
 
 	@PutMapping("/user/edit")
 	public UserProfileDto editUser(@RequestHeader("Authorization") String token, @RequestBody UserEditDto userEditDto) {
-		return userAccountService.editUser(token, userEditDto);
+		return userService.editUser(token, userEditDto);
 	}
 
 	@DeleteMapping("/user")
 	public UserProfileDto removeUser(@RequestHeader("Authorization") String token) {
-		return userAccountService.removeUser(token);
+		return userService.removeUser(token);
 	}
 
 	@PutMapping("/user/edit/password")
 	public void changePassword(@RequestHeader("Authorization") String token, MessageDto password) {
-		userAccountService.changePassword(token, password);
+		userService.changePassword(token, password);
 	}
 
 	@PutMapping("/admin/edit/{login}/{role}")
 	public Set<String> addRole(@PathVariable String login, @PathVariable String role,
 			@RequestHeader("Authorization") String token) {
-		return userAccountService.addRole(login, role, token);
+		return userService.addRole(login, role, token);
 	}
 
-	@PutMapping("/admin/edit/{login}/{role}")
+	@DeleteMapping("/admin/edit/{login}/{role}")
 	public Set<String> removeRole(@PathVariable String login, @PathVariable String role,
 			@RequestHeader("Authorization") String token) {
-		return userAccountService.removeRole(login, role, token);
+		return userService.removeRole(login, role, token);
 	}
 }

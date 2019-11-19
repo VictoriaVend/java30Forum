@@ -13,22 +13,30 @@ import telran.java30.forum.model.UserAccount;
 
 @SpringBootApplication
 public class ForumWebServiceApplication implements CommandLineRunner {
-	@Autowired
-	UserAccountRepository accountRepository;
-
+	
 	public static void main(String[] args) {
 		SpringApplication.run(ForumWebServiceApplication.class, args);
 	}
-
+	
+	@Autowired
+	UserAccountRepository accountRepository;
 	@Override
 	public void run(String... args) throws Exception {
-		if (accountRepository.existsById("admin")) {
-			String pas = BCrypt.hashpw("admin", BCrypt.gensalt());
-			UserAccount admin = UserAccount.builder().login("admin").password(pas).firstName("admin").lastName("admin")
-					.role("Administrator").role("Maderator").role("User").expDate(LocalDateTime.MAX).build();
-
+		if(!accountRepository.existsById("admin")) {
+			String hashPassword = BCrypt.hashpw("admin", BCrypt.gensalt()); 
+			UserAccount admin = UserAccount.builder()
+					.login("admin")
+					.password(hashPassword)
+					.firstName("Super")
+					.lastName("Admin")
+					.role("User")
+					.role("Moderator")
+					.role("Administrator")
+					.expDate(LocalDateTime.now().plusYears(25))
+					.build();
 			accountRepository.save(admin);
 		}
+		
 	}
 
 }

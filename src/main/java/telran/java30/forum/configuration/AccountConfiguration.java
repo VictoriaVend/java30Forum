@@ -15,6 +15,21 @@ import telran.java30.forum.service.UserAccountCredentials;
 public class AccountConfiguration {
 	@Value("${exp.value}")
 	long expPeriod;
+	
+	@Value("${loginAdmin}")
+	String loginAdmin;
+
+	
+	
+	
+	@ManagedAttribute
+	public String getLoginAdmin() {
+		return loginAdmin;
+	}
+	@ManagedAttribute
+	public void setLoginAdmin(String loginAdmin) {
+		this.loginAdmin = loginAdmin;
+	}
 
 	@ManagedAttribute
 	public long getExpPeriod() {

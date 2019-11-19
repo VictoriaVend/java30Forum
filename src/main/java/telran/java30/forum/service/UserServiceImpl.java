@@ -21,23 +21,23 @@ import telran.java30.forum.model.UserAccount;
 @Service
 public class UserServiceImpl implements UserService {
 	@Autowired
-	UserAccountRepository accountRepository;
+	UserAccountRepository userAccountRepository;
 
 	@Autowired
 	AccountConfiguration accountConfiguration;
 
-	UserAccount userAccountAdmin = accountRepository.findById("admin").orElseThrow(UserAuthenticationException::new);
+	
 
 	@Override
 	public UserProfileDto register(UserRegisterDto userRegisterDto) {
-		if (accountRepository.existsById(userRegisterDto.getLogin())) {
+		if (userAccountRepository.existsById(userRegisterDto.getLogin())) {
 			throw new UserExistsException();
 		}
 		String hashPassword = BCrypt.hashpw(userRegisterDto.getPassword(), BCrypt.gensalt());
 		UserAccount userAccount = UserAccount.builder().login(userRegisterDto.getLogin()).password(hashPassword)
 				.firstName(userRegisterDto.getFirstName()).lastName(userRegisterDto.getLastName()).role("User")
 				.expDate(LocalDateTime.now().plusDays(accountConfiguration.getExpPeriod())).build();
-		accountRepository.save(userAccount);
+		userAccountRepository.save(userAccount);
 		return userAccountToUserProfileDto(userAccount);
 	}
 
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 		UserAccount userAccount = authentication(token);
 		userAccount.setFirstName(userEditDto.getFirstName());
 		userAccount.setLastName(userEditDto.getLastName());
-		accountRepository.save(userAccount);
+		userAccountRepository.save(userAccount);
 
 		return userAccountToUserProfileDto(userAccount);
 	}
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserProfileDto removeUser(String token) {
 		UserAccount userAccount = authentication(token);
-		accountRepository.deleteById(userAccount.getLogin());
+		userAccountRepository.deleteById(userAccount.getLogin());
 		return userAccountToUserProfileDto(userAccount);
 	}
 
@@ -75,35 +75,37 @@ public class UserServiceImpl implements UserService {
 		UserAccount userAccount = authentication(token);
 		userAccount.setPassword(BCrypt.hashpw(password.getMessage(), BCrypt.gensalt()));
 		userAccount.setExpDate(LocalDateTime.now().plusDays(accountConfiguration.getExpPeriod()));
-		accountRepository.save(userAccount);
+		userAccountRepository.save(userAccount);
 
 	}
 
 	@Override
 	public Set<String> addRole(String login, String role, String token) {
-		
+		UserAccount userAccountAdmin = userAccountRepository.findById(accountConfiguration.getLoginAdmin()).orElseThrow(UserAuthenticationException::new);
 		if(userAccountAdmin.equals(authentication(token))) {throw new ForbiddenException();}
-		UserAccount userAccount = accountRepository.findById(login)
+		UserAccount userAccount = userAccountRepository.findById(login)
 				.orElseThrow(UserAuthenticationException::new);
 		userAccount.addRole(role);
-		accountRepository.save(userAccount);
+		userAccountRepository.save(userAccount);
 		return userAccount.getRoles();
 			
 	}
-
+	
 	@Override
 	public Set<String> removeRole(String login, String role, String token) {
+		UserAccount userAccountAdmin = userAccountRepository.findById(accountConfiguration.getLoginAdmin()).orElseThrow(UserAuthenticationException::new);
 		if(userAccountAdmin.equals(authentication(token))) {throw new ForbiddenException();}
-		UserAccount userAccount = accountRepository.findById(login)
+		UserAccount userAccount = userAccountRepository.findById(login)
 				.orElseThrow(UserAuthenticationException::new);
 		
-		if(userAccount.removeRole(role)) {accountRepository.save(userAccount);}
+		if(userAccount.removeRole(role)) {userAccountRepository.save(userAccount);}
 		return userAccount.getRoles();
 	}
 
 	private UserAccount authentication(String token) {
+		
 		UserAccountCredentials userAccountCredentials = accountConfiguration.tokenDecode(token);
-		UserAccount userAccount = accountRepository.findById(userAccountCredentials.getLogin())
+		UserAccount userAccount = userAccountRepository.findById(userAccountCredentials.getLogin())
 				.orElseThrow(UserAuthenticationException::new);
 		if (!BCrypt.checkpw(userAccountCredentials.getPassword(), userAccount.getPassword())) {
 			throw new ForbiddenException();
