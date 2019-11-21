@@ -19,9 +19,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import telran.java30.account.configuration.AccountConfiguration;
+import telran.java30.account.configuration.UserAccountCredentials;
 import telran.java30.account.dao.UserAccountRepository;
 import telran.java30.account.model.UserAccount;
-import telran.java30.account.service.UserAccountCredentials;
 
 @Service
 @Order(10)

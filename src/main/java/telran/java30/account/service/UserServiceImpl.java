@@ -12,7 +12,6 @@ import telran.java30.account.dao.UserAccountRepository;
 import telran.java30.account.dto.UserEditDto;
 import telran.java30.account.dto.UserProfileDto;
 import telran.java30.account.dto.UserRegisterDto;
-import telran.java30.account.exeption.ForbiddenException;
 import telran.java30.account.exeption.UserAuthenticationException;
 import telran.java30.account.exeption.UserExistsException;
 import telran.java30.account.model.UserAccount;
@@ -45,15 +44,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserProfileDto login(String token) {
-		UserAccount userAccount = authentication(token);
-		return userAccountToUserProfileDto(userAccount);
+	public UserProfileDto login(String login) {
+		
+		return userAccountToUserProfileDto(userAccountRepository.findById(login).get());
 	}
 
 	@Override
-	public UserProfileDto editUser(String token, UserEditDto userEditDto) {
+	public UserProfileDto editUser(String login, UserEditDto userEditDto) {
 
-		UserAccount userAccount = authentication(token);
+		UserAccount userAccount = userAccountRepository.findById(login).get();
 		userAccount.setFirstName(userEditDto.getFirstName());
 		userAccount.setLastName(userEditDto.getLastName());
 		userAccountRepository.save(userAccount);
@@ -62,33 +61,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserProfileDto removeUser(String token) {
-		UserAccount userAccount = authentication(token);
+	public UserProfileDto removeUser(String login) {
+		UserAccount userAccount =userAccountRepository.findById(login).get();
 		userAccountRepository.deleteById(userAccount.getLogin());
 		return userAccountToUserProfileDto(userAccount);
 	}
 
 	@Override
-	public void changePassword(String token, MessageDto password) {
-		UserAccount userAccount = authentication(token);
-		String pas = password.getMessage();
-
-		pas = BCrypt.hashpw(password.getMessage(), BCrypt.gensalt());
-
-		userAccount.setPassword(pas);
+	public void changePassword(String login, MessageDto password) {
+		UserAccount userAccount = userAccountRepository.findById(login).get();
+		userAccount.setPassword(BCrypt.hashpw(password.getMessage(), BCrypt.gensalt()));
 		userAccount.setExpDate(LocalDateTime.now().plusDays(accountConfiguration.getExpPeriod()));
 		userAccountRepository.save(userAccount);
 
 	}
 
 	@Override
-	public Set<String> addRole(String login, String role, String token) {
-		UserAccount userAccountAdmin = userAccountRepository.findById(accountConfiguration.getLoginAdmin())
-				.orElseThrow(UserAuthenticationException::new);
-	
-		if (!userAccountAdmin.equals(authentication(token))) {
-			throw new ForbiddenException();
-		}
+	public Set<String> addRole(String login, String role) {
 		UserAccount userAccount = userAccountRepository.findById(login).orElseThrow(UserAuthenticationException::new);
 		userAccount.addRole(role);
 		userAccountRepository.save(userAccount);
@@ -97,29 +86,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Set<String> removeRole(String login, String role, String token) {
-		UserAccount userAccountAdmin = userAccountRepository.findById(accountConfiguration.getLoginAdmin())
-				.orElseThrow(UserAuthenticationException::new);
-		if (!userAccountAdmin.getLogin().equals(authentication(token).getLogin())) {
-			throw new ForbiddenException();
-		}
+	public Set<String> removeRole(String login, String role) {
+		
 		UserAccount userAccount = userAccountRepository.findById(login).orElseThrow(UserAuthenticationException::new);
-
 		if (userAccount.removeRole(role)) {
 			userAccountRepository.save(userAccount);
 		}
 		return userAccount.getRoles();
 	}
 
-	private UserAccount authentication(String token) {
-
-		UserAccountCredentials userAccountCredentials = accountConfiguration.tokenDecode(token);
-		UserAccount userAccount = userAccountRepository.findById(userAccountCredentials.getLogin())
-				.orElseThrow(UserAuthenticationException::new);
-		if (!BCrypt.checkpw(userAccountCredentials.getPassword(), userAccount.getPassword())) {
-			throw new ForbiddenException();
-		}
-		return userAccount;
-
-	}
 }

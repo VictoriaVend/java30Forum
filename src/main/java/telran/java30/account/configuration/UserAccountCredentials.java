@@ -1,4 +1,4 @@
-package telran.java30.account.service;
+package telran.java30.account.configuration;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

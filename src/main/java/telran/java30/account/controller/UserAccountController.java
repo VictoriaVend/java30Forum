@@ -31,34 +31,34 @@ public class UserAccountController {
 
 	@PostMapping("/login")
 	public UserProfileDto login(@RequestHeader("Authorization") String token,Principal principal) {
-		principal.getName();
-		return userService.login(token);
+		
+		return userService.login(principal.getName());
 	}
 
 	@PutMapping("/user/edit")
-	public UserProfileDto editUser(@RequestHeader("Authorization") String token, @RequestBody UserEditDto userEditDto) {
-		return userService.editUser(token, userEditDto);
+	public UserProfileDto editUser(@RequestHeader("Authorization") String token, @RequestBody UserEditDto userEditDto, Principal principal) {
+		return userService.editUser(principal.getName(), userEditDto);
 	}
 
 	@DeleteMapping("/user")
-	public UserProfileDto removeUser(@RequestHeader("Authorization") String token) {
-		return userService.removeUser(token);
+	public UserProfileDto removeUser(@RequestHeader("Authorization") String token,Principal principal) {
+		return userService.removeUser(principal.getName());
 	}
 
 	@PutMapping("/user/edit/password")
-	public void changePassword(@RequestHeader("Authorization") String token, @RequestBody MessageDto password) {
-		userService.changePassword(token, password);
+	public void changePassword(@RequestHeader("Authorization") String token, @RequestBody MessageDto password,Principal principal) {
+		userService.changePassword(principal.getName(), password);
 	}
 
 	@PutMapping("/admin/edit/{login}/{role}")
 	public Set<String> addRole(@PathVariable String login, @PathVariable String role,
-			@RequestHeader("Authorization") String token) {
-		return userService.addRole(login, role, token);
+			@RequestHeader("Authorization") String token, Principal principal) {
+		return userService.addRole(login, role);
 	}
 
 	@DeleteMapping("/admin/edit/{login}/{role}")
 	public Set<String> removeRole(@PathVariable String login, @PathVariable String role,
-			@RequestHeader("Authorization") String token) {
-		return userService.removeRole(login, role, token);
+			@RequestHeader("Authorization") String token, Principal principal) {
+		return userService.removeRole(login, role);
 	}
 }

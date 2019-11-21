@@ -8,7 +8,6 @@ import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
 import telran.java30.account.exeption.UserAuthenticationException;
-import telran.java30.account.service.UserAccountCredentials;
 
 @Configuration
 @ManagedResource
