@@ -29,15 +29,16 @@ public class AdminAuthorizationFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String path = request.getServletPath();
 
-		if (chekPoint(path) && !request.getUserPrincipal().getName().equals(accountConfiguration.getLoginAdmin())) {
+		if (chekPoint(path)) {
+			if(!request.getUserPrincipal().getName().equals(accountConfiguration.getLoginAdmin())) {
 			response.sendError(401, "No access!");
 			return;
-		}
+		}}
 		chain.doFilter(request, response);
 	}
 
 	private boolean chekPoint(String path) {
-		return "/admin/edit/{login}/{role}".equalsIgnoreCase(path);
+		return path.startsWith("/account/admin/edit/");
 
 	}
 }

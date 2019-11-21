@@ -1,6 +1,7 @@
 package telran.java30.account.security.filter;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDateTime;
 
 import javax.servlet.Filter;
@@ -28,9 +29,9 @@ public class ExpDateFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String path = request.getServletPath();
-		String principal =request.getUserPrincipal().getName();
+		Principal principal =request.getUserPrincipal();
 	if(principal!=null&&!chekPointCut(path)) {
-		if(userAccountRepository.findById(principal)
+		if(userAccountRepository.findById(principal.getName())
 		.get().getExpDate().isBefore(LocalDateTime.now())) {
 			response.sendError(403, "Password expired, change password!");
 			return;
