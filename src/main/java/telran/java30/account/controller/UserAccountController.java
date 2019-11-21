@@ -1,5 +1,6 @@
-package telran.java30.forum.controller;
+package telran.java30.account.controller;
 
+import java.security.Principal;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import telran.java30.account.dto.UserEditDto;
+import telran.java30.account.dto.UserProfileDto;
+import telran.java30.account.dto.UserRegisterDto;
+import telran.java30.account.service.UserService;
 import telran.java30.forum.dto.MessageDto;
-import telran.java30.forum.dto.UserEditDto;
-import telran.java30.forum.dto.UserProfileDto;
-import telran.java30.forum.dto.UserRegisterDto;
-import telran.java30.forum.service.UserService;
 
 @RestController
 @RequestMapping("/account")
@@ -29,7 +30,8 @@ public class UserAccountController {
 	}
 
 	@PostMapping("/login")
-	public UserProfileDto login(@RequestHeader("Authorization") String token) {
+	public UserProfileDto login(@RequestHeader("Authorization") String token,Principal principal) {
+		principal.getName();
 		return userService.login(token);
 	}
 

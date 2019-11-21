@@ -1,4 +1,4 @@
-package telran.java30.forum.service;
+package telran.java30.account.service;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -7,16 +7,16 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import telran.java30.forum.configuration.AccountConfiguration;
-import telran.java30.forum.dao.UserAccountRepository;
+import telran.java30.account.configuration.AccountConfiguration;
+import telran.java30.account.dao.UserAccountRepository;
+import telran.java30.account.dto.UserEditDto;
+import telran.java30.account.dto.UserProfileDto;
+import telran.java30.account.dto.UserRegisterDto;
+import telran.java30.account.exeption.ForbiddenException;
+import telran.java30.account.exeption.UserAuthenticationException;
+import telran.java30.account.exeption.UserExistsException;
+import telran.java30.account.model.UserAccount;
 import telran.java30.forum.dto.MessageDto;
-import telran.java30.forum.dto.UserEditDto;
-import telran.java30.forum.dto.UserProfileDto;
-import telran.java30.forum.dto.UserRegisterDto;
-import telran.java30.forum.exeption.ForbiddenException;
-import telran.java30.forum.exeption.UserAuthenticationException;
-import telran.java30.forum.exeption.UserExistsException;
-import telran.java30.forum.model.UserAccount;
 
 @Service
 public class UserServiceImpl implements UserService {

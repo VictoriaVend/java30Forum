@@ -20,8 +20,9 @@ import telran.java30.forum.dto.PostRepostDto;
 import telran.java30.forum.service.ForumService;
 
 
-@RequestMapping(ForumURL.FORUM)
+
 @RestController
+@RequestMapping(ForumURL.FORUM)
 public class ForumController {
 	@Autowired
 	ForumService forumService;

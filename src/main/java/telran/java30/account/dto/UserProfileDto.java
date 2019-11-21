@@ -1,5 +1,6 @@
-package telran.java30.forum.dto;
+package telran.java30.account.dto;
 
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,9 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class UserRegisterDto {
+public class UserProfileDto {
 	String login;
-	String password;
 	String firstName;
 	String lastName;
+	Set<String> roles;
+
 }

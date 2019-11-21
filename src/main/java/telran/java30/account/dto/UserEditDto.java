@@ -1,4 +1,4 @@
-package telran.java30.forum.dto;
+package telran.java30.account.dto;
 
 import lombok.Getter;
 

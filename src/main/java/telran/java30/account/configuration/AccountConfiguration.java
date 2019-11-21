@@ -1,4 +1,4 @@
-package telran.java30.forum.configuration;
+package telran.java30.account.configuration;
 
 import java.util.Base64;
 
@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
-import telran.java30.forum.exeption.UserAuthenticationException;
-import telran.java30.forum.service.UserAccountCredentials;
+import telran.java30.account.exeption.UserAuthenticationException;
+import telran.java30.account.service.UserAccountCredentials;
 
 @Configuration
 @ManagedResource

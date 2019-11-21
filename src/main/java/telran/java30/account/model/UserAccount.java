@@ -1,4 +1,4 @@
-package telran.java30.forum.model;
+package telran.java30.account.model;
 
 import java.time.LocalDateTime;
 import java.util.Set;

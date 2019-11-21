@@ -1,4 +1,4 @@
-package telran.java30.forum;
+package telran.java30;
 
 import java.time.LocalDateTime;
 
@@ -8,8 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import telran.java30.forum.dao.UserAccountRepository;
-import telran.java30.forum.model.UserAccount;
+import telran.java30.account.dao.UserAccountRepository;
+import telran.java30.account.model.UserAccount;
 
 @SpringBootApplication
 public class ForumWebServiceApplication implements CommandLineRunner {
