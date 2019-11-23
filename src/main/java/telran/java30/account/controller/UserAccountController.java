@@ -16,7 +16,6 @@ import telran.java30.account.dto.UserEditDto;
 import telran.java30.account.dto.UserProfileDto;
 import telran.java30.account.dto.UserRegisterDto;
 import telran.java30.account.service.UserService;
-import telran.java30.forum.dto.MessageDto;
 
 @RestController
 @RequestMapping("/account")
@@ -45,8 +44,8 @@ public class UserAccountController {
 		return userService.removeUser(principal.getName());
 	}
 
-	@PutMapping("/user/edit/password")
-	public void changePassword(@RequestHeader("Authorization") String token, @RequestBody MessageDto password,Principal principal) {
+	@PutMapping("/user/password")
+	public void changePassword(@RequestHeader("Authorization") String token, @RequestHeader("X-Password")String password,Principal principal) {
 		userService.changePassword(principal.getName(), password);
 	}
 

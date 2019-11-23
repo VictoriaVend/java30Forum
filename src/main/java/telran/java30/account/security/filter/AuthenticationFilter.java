@@ -37,6 +37,7 @@ public class AuthenticationFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String path = request.getServletPath();
+		
 		String method = request.getMethod();
 		String auth = request.getHeader("Authorization");
 		if (!chekPointCut(path, method)) {

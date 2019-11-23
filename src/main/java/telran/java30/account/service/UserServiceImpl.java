@@ -15,7 +15,7 @@ import telran.java30.account.dto.UserRegisterDto;
 import telran.java30.account.exeption.UserAuthenticationException;
 import telran.java30.account.exeption.UserExistsException;
 import telran.java30.account.model.UserAccount;
-import telran.java30.forum.dto.MessageDto;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -68,9 +68,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void changePassword(String login, MessageDto password) {
+	public void changePassword(String login, String password) {
 		UserAccount userAccount = userAccountRepository.findById(login).get();
-		userAccount.setPassword(BCrypt.hashpw(password.getMessage(), BCrypt.gensalt()));
+		userAccount.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
 		userAccount.setExpDate(LocalDateTime.now().plusDays(accountConfiguration.getExpPeriod()));
 		userAccountRepository.save(userAccount);
 

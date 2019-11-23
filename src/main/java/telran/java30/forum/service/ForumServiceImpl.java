@@ -26,7 +26,7 @@ public class ForumServiceImpl implements ForumService {
 	@Override
 	public boolean addLike(String id) {
 
-		Post post = forumRepository.findById(id).get();
+		Post post = forumRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
 		post.addLike();
 		forumRepository.save(post);
 		return forumRepository.existsById(id);

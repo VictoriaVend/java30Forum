@@ -78,7 +78,7 @@ public class ForumController {
 		return forumService.deletePost(id);
 	}
 
-	@PutMapping(ForumURL.FORUM + ForumURL.POST + "/{id}")
+	@PutMapping(ForumURL.POST + "/{id}")
 	public PostRepostDto updatePost(@PathVariable String id, @RequestBody PostDto postDto) {
 		return forumService.updatePost(postDto, id);
 	}
