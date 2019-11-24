@@ -40,7 +40,16 @@ public class AuthenticationFilter implements Filter {
 		
 		String method = request.getMethod();
 		String auth = request.getHeader("Authorization");
+		System.out.println(request.getSession().getId());
 		if (!chekPointCut(path, method)) {
+			String session = request.getSession().getId();
+			if(session!=null&&auth==null) {
+				UserAccount userAccount = accountConfiguration.getUser(session);
+				if(userAccount!=null) {
+					chain.doFilter(new WrapperRequest(request, userAccount.getLogin()), response);
+					return;
+				}
+			
 			UserAccountCredentials credetials = null;
 			try {
 				credetials = accountConfiguration.tokenDecode(auth);
@@ -48,7 +57,7 @@ public class AuthenticationFilter implements Filter {
 				response.sendError(401, "Header Authorization not valid");
 				return;
 			}
-			UserAccount userAccount = userAccountRepository.findById(credetials.getLogin()).orElse(null);
+			 userAccount = userAccountRepository.findById(credetials.getLogin()).orElse(null);
 			if (userAccount == null) {
 				response.sendError(401, "User not found");
 				return;
@@ -57,11 +66,12 @@ public class AuthenticationFilter implements Filter {
 				response.sendError(403, "Password incorrect");
 				return;
 			}
+			accountConfiguration.addUser(session, userAccount);
 			chain.doFilter(new WrapperRequest(request, credetials.getLogin()), response);
 			return;
 		}
 
-		chain.doFilter(request, response);
+		chain.doFilter(request, response);}
 
 	}
 

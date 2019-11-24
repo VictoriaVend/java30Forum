@@ -1,17 +1,24 @@
 package telran.java30.account.configuration;
 
 import java.util.Base64;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
 import telran.java30.account.exeption.UserAuthenticationException;
+import telran.java30.account.model.UserAccount;
 
 @Configuration
 @ManagedResource
 public class AccountConfiguration {
+	
+	Map<String,UserAccount> users= new ConcurrentHashMap<>();
+	
 	@Value("${exp.value}")
 	long expPeriod;
 	
@@ -52,5 +59,12 @@ public class AccountConfiguration {
 			throw new UserAuthenticationException();
 		}
 
+	}
+	public boolean addUser(String session, UserAccount userAccount) {
+		return users.put(session,userAccount)==null;
+	
+	}
+	public UserAccount getUser(String session) {
+		return users.get(session);
 	}
 }

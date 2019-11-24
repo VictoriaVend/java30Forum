@@ -29,23 +29,23 @@ public class UserAccountController {
 	}
 
 	@PostMapping("/login")
-	public UserProfileDto login(@RequestHeader("Authorization") String token,Principal principal) {
+	public UserProfileDto login(Principal principal) {
 		
 		return userService.login(principal.getName());
 	}
 
 	@PutMapping("/user/edit")
-	public UserProfileDto editUser(@RequestHeader("Authorization") String token, @RequestBody UserEditDto userEditDto, Principal principal) {
+	public UserProfileDto editUser( @RequestBody UserEditDto userEditDto, Principal principal) {
 		return userService.editUser(principal.getName(), userEditDto);
 	}
 
 	@DeleteMapping("/user")
-	public UserProfileDto removeUser(@RequestHeader("Authorization") String token,Principal principal) {
+	public UserProfileDto removeUser(Principal principal) {
 		return userService.removeUser(principal.getName());
 	}
 
 	@PutMapping("/user/password")
-	public void changePassword(@RequestHeader("Authorization") String token, @RequestHeader("X-Password")String password,Principal principal) {
+	public void changePassword( @RequestHeader("X-Password")String password,Principal principal) {
 		userService.changePassword(principal.getName(), password);
 	}
 
