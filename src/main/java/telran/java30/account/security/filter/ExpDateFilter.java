@@ -32,7 +32,7 @@ public class ExpDateFilter implements Filter {
 		Principal principal =request.getUserPrincipal();
 	if(principal!=null&&!chekPointCut(path)) {
 		if(userAccountRepository.findById(principal.getName())
-		.get().getExpDate().isBefore(LocalDateTime.now())) {
+		.get().getExpDate().isAfter(LocalDateTime.now())) {
 			response.sendError(403, "Password expired, change password!");
 			return;
 		}
